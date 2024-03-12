@@ -1,5 +1,7 @@
+from file_datasource import FileDatasource
+
 def run():
-    pass
+    datasource = FileDatasource("data/accelerometer.csv", "data/gps.csv")
 
 
 if __name__ == "__main__":

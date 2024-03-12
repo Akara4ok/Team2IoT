@@ -4,7 +4,7 @@ from app.interfaces.agent_gateway import AgentGateway
 from app.entities.agent_data import AgentData, GpsData
 from app.usecases.data_processing import process_agent_data
 from app.interfaces.hub_gateway import HubGateway
-from edge.app.adapters.hub_http_adapter import HubHttpAdapter
+from app.adapters.hub_http_adapter import HubHttpAdapter
 
 
 class AgentMQTTAdapter(AgentGateway):

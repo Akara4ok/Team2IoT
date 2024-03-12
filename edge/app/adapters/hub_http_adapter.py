@@ -1,5 +1,6 @@
 import logging
 
+import json
 import requests as requests
 
 from app.entities.processed_agent_data import ProcessedAgentData
@@ -18,12 +19,13 @@ class HubHttpAdapter(HubGateway):
         Returns:
             bool: True if the data is successfully saved, False otherwise.
         """
-        url = f"{self.api_base_url}/processed_agent_data/"
+        print(json.dumps(processed_data))
+        # url = f"{self.api_base_url}/processed_agent_data/"
 
-        response = requests.post(url, data=processed_data.model_dump_json())
-        if response.status_code != 200:
-            logging.info(
-                f"Invalid Hub response\nData: {processed_data.model_dump_json()}\nResponse: {response}"
-            )
-            return False
+        # response = requests.post(url, data=processed_data.model_dump_json())
+        # if response.status_code != 200:
+        #     logging.info(
+        #         f"Invalid Hub response\nData: {processed_data.model_dump_json()}\nResponse: {response}"
+        #     )
+        #     return False
         return True

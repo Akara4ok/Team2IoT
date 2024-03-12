@@ -19,7 +19,7 @@ class HubHttpAdapter(HubGateway):
         Returns:
             bool: True if the data is successfully saved, False otherwise.
         """
-        print(json.dumps(processed_data))
+        logging.info(processed_data.road_state)
         # url = f"{self.api_base_url}/processed_agent_data/"
 
         # response = requests.post(url, data=processed_data.model_dump_json())

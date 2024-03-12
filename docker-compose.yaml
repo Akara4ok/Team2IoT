@@ -5,17 +5,18 @@ services:
     image: eclipse-mosquitto
     container_name: mqtt
     volumes:
-    - ./mosquitto:/mosquitto
-    - ./mosquitto/data:/mosquitto/data
-    - ./mosquitto/log:/mosquitto/log
+      - ./agent/docker/mosquitto:/mosquitto
+      - ./agent/docker/mosquitto/data:/mosquitto/data
+      - ./agent/docker/mosquitto/log:/mosquitto/log
     ports:
       - 1883:1883
       - 9001:9001
     networks:
+      mqtt_network:
     
   edge:
     container_name: edge
-    build: ../
+    build: ./edge
     depends_on:
       - mqtt
     environment:
@@ -29,14 +30,13 @@ services:
       HUB_MQTT_TOPIC: "processed_data_topic"
     networks:
       mqtt_network:
-      edge_hub:
 
   fake_agent:
     container_name: agent
-    build: ../agent
+    build: ./agent
     depends_on:
       - mqtt
-  environment:
+    environment:
       MQTT_BROKER_HOST: "mqtt"
       MQTT_BROKER_PORT: 1883
       MQTT_TOPIC: "agent_data_topic"

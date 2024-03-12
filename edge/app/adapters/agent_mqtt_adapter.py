@@ -4,6 +4,7 @@ from app.interfaces.agent_gateway import AgentGateway
 from app.entities.agent_data import AgentData, GpsData
 from app.usecases.data_processing import process_agent_data
 from app.interfaces.hub_gateway import HubGateway
+from edge.app.adapters.hub_http_adapter import HubHttpAdapter
 
 
 class AgentMQTTAdapter(AgentGateway):
@@ -63,7 +64,7 @@ if __name__ == "__main__":
     broker_port = 1883
     topic = "agent_data_topic"
     # Assuming you have implemented the StoreGateway and passed it to the adapter
-    store_gateway = HubGateway()
+    store_gateway = HubHttpAdapter()
     adapter = AgentMQTTAdapter(broker_host, broker_port, topic, store_gateway)
     adapter.connect()
     adapter.start()

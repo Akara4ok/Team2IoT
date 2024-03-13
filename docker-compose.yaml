@@ -23,13 +23,14 @@ services:
       MQTT_BROKER_HOST: "mqtt"
       MQTT_BROKER_PORT: 1883
       MQTT_TOPIC: "agent_data_topic"
-      HUB_HOST: "store"
-      HUB_PORT: 8000
+      HUB_HOST: "localhost"
+      HUB_PORT: 9000
       HUB_MQTT_BROKER_HOST: "mqtt"
       HUB_MQTT_BROKER_PORT: 1883
       HUB_MQTT_TOPIC: "processed_data_topic"
     networks:
       mqtt_network:
+      edge_hub:
 
   fake_agent:
     container_name: agent
@@ -44,11 +45,90 @@ services:
     networks:
       mqtt_network:
 
+  postgres_db:
+    image: postgres:latest
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: test_db
+    volumes:
+      - ./strore/docker/postgres_data:/var/lib/postgresql/data
+      - ./strore/docker/db/structure.sql:/docker-entrypoint-initdb.d/structure.sql
+    ports:
+      - "5432:5432"
+    networks:
+      db_network:
+
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      db_network:
+
+  store:
+    container_name: store
+    build: ./strore
+    depends_on:
+      - postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: test_db
+      POSTGRES_HOST: postgres_db
+      POSTGRES_PORT: 5432
+    ports:
+      - "8000:8000"
+    networks:
+      db_network:
+      hub_store:
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      hub_redis:
+
+  hub:
+    container_name: hub
+    build: ./hub
+    depends_on:
+      - mqtt
+      - redis
+      - store
+    environment:
+      STORE_API_HOST: "store"
+      STORE_API_PORT: 8000
+      REDIS_HOST: "redis"
+      REDIS_PORT: 6379
+      MQTT_BROKER_HOST: "mqtt"
+      MQTT_BROKER_PORT: 1883
+      MQTT_TOPIC: "processed_data_topic"
+      BATCH_SIZE: 1
+    ports:
+      - "9000:8000"
+    networks:
+      mqtt_network:
+      hub_store:
+      hub_redis:
+      edge_hub:
+
 networks:
   mqtt_network:
   db_network:
   edge_hub:
-  hub:
   hub_store:
   hub_redis:
 

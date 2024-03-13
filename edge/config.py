@@ -20,5 +20,5 @@ HUB_MQTT_TOPIC = os.environ.get("HUB_MQTT_TOPIC") or "processed_agent_data_topic
 
 # Configuration for the Hub
 HUB_HOST = os.environ.get("HUB_HOST") or "localhost"
-HUB_PORT = try_parse_int(os.environ.get("HUB_PORT")) or 12000
+HUB_PORT = try_parse_int(os.environ.get("HUB_PORT")) or 9000
 HUB_URL = f"http://{HUB_HOST}:{HUB_PORT}"

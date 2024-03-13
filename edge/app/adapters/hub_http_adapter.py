@@ -6,7 +6,6 @@ import requests as requests
 from app.entities.processed_agent_data import ProcessedAgentData
 from app.interfaces.hub_gateway import HubGateway
 
-
 class HubHttpAdapter(HubGateway):
     def __init__(self, api_base_url):
         self.api_base_url = api_base_url
@@ -19,13 +18,13 @@ class HubHttpAdapter(HubGateway):
         Returns:
             bool: True if the data is successfully saved, False otherwise.
         """
-        logging.info(processed_data.road_state)
-        # url = f"{self.api_base_url}/processed_agent_data/"
+        url = f"{self.api_base_url}/processed_agent_data/"
+        logging.info(url)
 
-        # response = requests.post(url, data=processed_data.model_dump_json())
-        # if response.status_code != 200:
-        #     logging.info(
-        #         f"Invalid Hub response\nData: {processed_data.model_dump_json()}\nResponse: {response}"
-        #     )
-        #     return False
+        response = requests.post(url, data=processed_data.model_dump_json())
+        if response.status_code != 200:
+            logging.info(
+                f"Invalid Hub response\nData: {processed_data.model_dump_json()}\nResponse: {response}"
+            )
+            return False
         return True

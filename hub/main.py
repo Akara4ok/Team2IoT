@@ -87,10 +87,17 @@ def on_message(client, userdata, msg):
         logging.info(f"Error processing MQTT message: {e}")
 
 
-# Connect
-client.on_connect = on_connect
-client.on_message = on_message
-client.connect(MQTT_BROKER_HOST, MQTT_BROKER_PORT)
+if __name__ == "__main__":
+    import uvicorn
+    
+    # Connect
+    client.on_connect = on_connect
+    client.on_message = on_message
+    client.connect(MQTT_BROKER_HOST, MQTT_BROKER_PORT)
 
-# Start
-client.loop_start()
+    # Start
+    client.loop_start()
+    
+    logging.info("changed")
+
+    uvicorn.run(app, host="0.0.0.0", port=9000)

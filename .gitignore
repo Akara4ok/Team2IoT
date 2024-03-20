@@ -160,3 +160,6 @@ cython_debug/
 #.idea/
 
 ./data/
+
+strore/docker/postgres_data/
+hub/docker/mosquitto/data/

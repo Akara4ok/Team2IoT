@@ -8,16 +8,19 @@ public class Moving : MonoBehaviour
     [SerializeField]
     List<(double x, double y)> coordinates;
     [SerializeField]
-    float speed;
-    [SerializeField]
+    float speed = 10;
+
+
     private int index = 0;
-    [SerializeField]
     private Vector3 target;
+    private Vector3 nextTarget;
 
     void Start()
     {
         string filePath = "Assets/testData/gps.csv";
         coordinates = ReadCSV.ReadCsvFile(filePath);
+        if (coordinates.Count > 0 )
+            target = new Vector3((float)coordinates[index].x, 0, (float)coordinates[index].y);
     }
 
     private void Update()

@@ -14,6 +14,9 @@ public class Moving : MonoBehaviour
     [SerializeField]
     private Vector3 target;
 
+    [SerializeField]
+    float rotationSpeed = 1;
+
     void Start()
     {
         string filePath = "Assets/testData/gps.csv";
@@ -25,12 +28,21 @@ public class Moving : MonoBehaviour
         Move();
     }
 
-    void Move()
+    private void Move()
     {
         if (index < coordinates.Count)
         {
             target = new Vector3((float)coordinates[index].x, 0, (float)coordinates[index].y);
             transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+
+            if (target != Vector3.zero)
+            {
+                Vector3 dirMovement = new Vector3(target.x, target.y, target.z); 
+                dirMovement.Normalize();
+                Quaternion quaternion = Quaternion.LookRotation(dirMovement, Vector3.up);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, quaternion, rotationSpeed * Time.deltaTime);
+            }
+
             if (transform.position == target)
                 index++;
         }

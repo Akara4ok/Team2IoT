@@ -49,7 +49,7 @@ services:
 
   store:
     container_name: store
-    build: ../../store
+    build: ../../strore
     depends_on:
       - postgres_db
     restart: always

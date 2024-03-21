@@ -4,31 +4,34 @@ using System.Collections.Generic;
 public class Moving : MonoBehaviour
 {
     [SerializeField]
-    List<(double x, double y)> coordinates;
+    private List<(double x, double y)> coordinates;
+    [field: SerializeField]
+    public float Speed { private set; get; }
+    [field: SerializeField]
+    public float RotationSpeed { private set; get; }
+
     [SerializeField]
-    float speed = 10;
+    private RoadCreator roadCreator;
     [SerializeField]
-    RoadCreator roadCreator;
-    [SerializeField]
-    DriveCreator driveCreator;
-    [SerializeField]
-    private int index = 0;
-    private Vector3 target;
+    private DriveCreator driveCreator;
+
+    [field: SerializeField]
+    public int index = 0;
+
+    public Vector3 Target { private set; get; }
     private Vector3 nextTarget;
 
-    [SerializeField]
-    float rotationSpeed = 1;
-
+   
     void Start()
     {
         string filePath = "Assets/testData/gps.csv";
         coordinates = ReadCSV.ReadCsvFile(filePath);
         if (coordinates.Count > 1)
         {
-            target = new Vector3((float)coordinates[index].x, 0, (float)coordinates[index].y);
+            Target = new Vector3((float)coordinates[index].x, 0, (float)coordinates[index].y);
             nextTarget = new Vector3((float)coordinates[index + 1].x, 0, (float)coordinates[index + 1].y);
-            roadCreator.road.MovePoint(2, target);
-            roadCreator.road.MovePoint(3, target);
+            roadCreator.road.MovePoint(2, Target);
+            roadCreator.road.MovePoint(3, Target);
             roadCreator.road.AddSegment(nextTarget);
             index++;
         }
@@ -43,19 +46,13 @@ public class Moving : MonoBehaviour
     {
         if (index < coordinates.Count)
         {
-            transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, Target, Speed * Time.deltaTime);
 
-            if (target != Vector3.zero)
-            {
-                Vector3 dirMovement = new(target.x, target.y, target.z); 
-                dirMovement.Normalize();
-                Quaternion quaternion = Quaternion.LookRotation(dirMovement, Vector3.up);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, quaternion, rotationSpeed * Time.deltaTime);
-            }
+            Rotate();
 
-            if (transform.position.x == target.x && transform.position.z == target.z)
+            if (transform.position.x == Target.x && transform.position.z == Target.z)
             {
-                target = nextTarget;
+                Target = nextTarget;
                 if (index + 1 < coordinates.Count)
                 {
                     nextTarget = new Vector3((float)coordinates[index + 1].x, 0, (float)coordinates[index + 1].y);
@@ -69,6 +66,17 @@ public class Moving : MonoBehaviour
                 }
                 index++;
             }
+        }
+    }
+
+    private void Rotate()
+    {
+        Vector3 dirMovement = Target - transform.position;
+        if (dirMovement != Vector3.zero)
+        {
+            dirMovement.Normalize();
+            Quaternion quaternion = Quaternion.LookRotation(dirMovement, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, quaternion, RotationSpeed * Speed * Time.deltaTime);
         }
     }
 }

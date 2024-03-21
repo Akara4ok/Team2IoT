@@ -29,7 +29,7 @@ public class CameraFollow : MonoBehaviour
             ? -1 
             : 1;
 
-        Vector3 offset = new Vector3 (offsetToTarget.x * dirOffsetX, offsetToTarget.y, offsetToTarget.z * dirOffsetZ);
+        Vector3 offset = new Vector3(offsetToTarget.x * dirOffsetX, offsetToTarget.y, offsetToTarget.z * dirOffsetZ);
         transform.position = targetObject.position + offset;
     }
 

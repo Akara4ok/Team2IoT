@@ -3,25 +3,36 @@ using System.Collections.Generic;
 
 public class Moving : MonoBehaviour
 {
-    [SerializeField]
     private List<(double x, double y)> coordinates;
+
+    [field:Header("Speed params")]
+    [field: SerializeField]
+    private float targetSpeed;
     [field: SerializeField]
     public float Speed { private set; get; }
     [field: SerializeField]
+    private float timeDeleyGPS;
+    [field: SerializeField]
+    private float acceleration;
+
+    [field: SerializeField]
     public float RotationSpeed { private set; get; }
 
+    [field: Header("Creators")]
     [SerializeField]
     private RoadCreator roadCreator;
     [SerializeField]
     private DriveCreator driveCreator;
 
+    [field: Header("Debug")]
     [field: SerializeField]
     public int index = 0;
 
     public Vector3 Target { private set; get; }
     private Vector3 nextTarget;
 
-   
+    
+
     void Start()
     {
         string filePath = "Assets/testData/gps.csv";
@@ -40,6 +51,14 @@ public class Moving : MonoBehaviour
     private void Update()
     {
         Move();
+
+        UpdateSpeed(); 
+    }
+
+    private void UpdateSpeed()
+    {
+        if (Mathf.Abs(Speed - targetSpeed) > 0.01f)
+            Speed += acceleration * Time.deltaTime;
     }
 
     private void Move()
@@ -52,6 +71,9 @@ public class Moving : MonoBehaviour
 
             if (transform.position.x == Target.x && transform.position.z == Target.z)
             {
+                targetSpeed = ((nextTarget - Target).magnitude) / timeDeleyGPS;
+                acceleration = (targetSpeed - Speed) / (timeDeleyGPS / 2);
+
                 Target = nextTarget;
                 if (index + 1 < coordinates.Count)
                 {

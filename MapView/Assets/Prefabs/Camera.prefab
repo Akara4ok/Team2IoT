@@ -108,4 +108,4 @@ MonoBehaviour:
   targetObject: {fileID: 0}
   angleXToTarget: 45
   offsetToTarget: {x: 3, y: 3, z: 0}
-  speedRotate: 1
+  speedRotate: 5

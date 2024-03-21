@@ -41,13 +41,13 @@ public class Moving : MonoBehaviour
 
     private void Move()
     {
-        if (index < coordinates.Count)
+        if (index <= coordinates.Count)
         {
             transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
 
             if (target != Vector3.zero)
             {
-                Vector3 dirMovement = new(target.x, target.y, target.z); 
+                Vector3 dirMovement = new(target.x - transform.position.x, transform.position.y, target.z - transform.position.z); 
                 dirMovement.Normalize();
                 Quaternion quaternion = Quaternion.LookRotation(dirMovement, Vector3.up);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, quaternion, rotationSpeed * Time.deltaTime);

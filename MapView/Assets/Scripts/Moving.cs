@@ -5,18 +5,13 @@ public class Moving : MonoBehaviour
 {
     private List<(double x, double y)> coordinates;
 
-    [field:Header("Speed params")]
-    [field: SerializeField]
-    private float targetSpeed;
-    [field: SerializeField]
-    public float Speed { private set; get; }
+
+    [field:Header("Params")]
     [field: SerializeField]
     private float timeDeleyGPS;
     [field: SerializeField]
-    private float acceleration;
-
-    [field: SerializeField]
     public float RotationSpeed { private set; get; }
+
 
     [field: Header("Creators")]
     [SerializeField]
@@ -24,13 +19,21 @@ public class Moving : MonoBehaviour
     [SerializeField]
     private DriveCreator driveCreator;
 
+
     [field: Header("Debug")]
     [field: SerializeField]
-    public int index = 0;
+    private int index = 0;
+
+    [field: SerializeField]
+    private float targetSpeed;
+    [field: SerializeField]
+    public float Speed { private set; get; }
+    [field: SerializeField]
+    private float acceleration;
+
 
     public Vector3 Target { private set; get; }
     private Vector3 nextTarget;
-
     
 
     void Start()
@@ -51,13 +54,12 @@ public class Moving : MonoBehaviour
     private void Update()
     {
         Move();
-
         UpdateSpeed(); 
     }
 
     private void UpdateSpeed()
     {
-        if (Mathf.Abs(Speed - targetSpeed) > 0.01f)
+        if (Mathf.Abs(Speed - targetSpeed) > 0.05f)
             Speed += acceleration * Time.deltaTime;
     }
 

@@ -27,11 +27,11 @@ public class Moving : MonoBehaviour
         get { return _target; }
     }
     private RoadState _targetState;
-    private bool _isThereTarget = false;
+    private bool _isTarget = false;
 
     private Vector3 _nextTarget;
     private RoadState _nextTragetState;
-    private bool _isThereNextTarget = false;
+    private bool _isNextTarget = false;
 
     void Start()
     {
@@ -40,13 +40,13 @@ public class Moving : MonoBehaviour
 
         roadCreator.road.MovePoint(2, _target);
         roadCreator.road.MovePoint(3, _target);
-        _isThereTarget = true;
+        _isTarget = true;
         driveCreator.state = _targetState;
 
         if (Gps.GetNext(out _nextTarget, out _nextTragetState))
         {
             roadCreator.road.AddSegment(_nextTarget);
-            _isThereNextTarget = true;
+            _isNextTarget = true;
         }
 
         driveCreator.UpdateRoad();
@@ -60,13 +60,13 @@ public class Moving : MonoBehaviour
 
     private void UpdateSpeed()
     {
-        if ((acceleration > 0 && targetSpeed - Speed > 0.05f) || (acceleration < 0 && Speed - targetSpeed > 0.05f))
+        if ((acceleration > 0 && targetSpeed - Speed > 0) || (acceleration < 0 && targetSpeed - Speed < 0))
             Speed += acceleration * Time.deltaTime;
     }
 
     private void Move()
     {
-        if (_isThereTarget)
+        if (_isTarget)
         {
 
             transform.position = Vector3.MoveTowards(transform.position, _target, Speed * Time.deltaTime);
@@ -74,31 +74,31 @@ public class Moving : MonoBehaviour
 
             if (IsOnTarget())
             {
-                if (_isThereNextTarget)
+                if (_isNextTarget)
                 {
-                    AdjustTargetSpeed();
+                    ChangeTargetSpeed();
                     _target = _nextTarget;
                     _targetState = _nextTragetState;
                     driveCreator.state = _targetState;
-                    _isThereNextTarget = false;
+                    _isNextTarget = false;
                 }
                 else
                 {
-                    _isThereTarget = false;
+                    _isTarget = false;
                     return;
                 }
             }
 
-            if (!_isThereNextTarget && Gps.GetNext(out _nextTarget, out _nextTragetState))
+            if (!_isNextTarget && Gps.GetNext(out _nextTarget, out _nextTragetState))
             {
-                _isThereNextTarget = true;
+                _isNextTarget = true;
                 roadCreator.road.AddSegment(_nextTarget);
                 driveCreator.UpdateRoad();
             }
         }
         else if (Gps.GetNext(out _target, out _targetState))
         {
-            _isThereTarget = true;
+            _isTarget = true;
             driveCreator.state = _targetState;
             roadCreator.road.AddSegment(_target);
             driveCreator.UpdateRoad();
@@ -122,7 +122,7 @@ public class Moving : MonoBehaviour
         }
     }
 
-    private void AdjustTargetSpeed()
+    private void ChangeTargetSpeed()
     {
         targetSpeed = ((_nextTarget - _target).magnitude) / timeDeleyGPS;
         acceleration = (targetSpeed - Speed) / (timeDeleyGPS / 2);

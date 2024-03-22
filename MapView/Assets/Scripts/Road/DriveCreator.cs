@@ -6,7 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 public class DriveCreator : MonoBehaviour
 {
-
     [Range(.05f, 1.5f)]
     public float spacing = 1;
     public float roadWidth = 1;
@@ -23,7 +22,7 @@ public class DriveCreator : MonoBehaviour
         int textureRepeat = Mathf.RoundToInt(tiling * points.Length * spacing * .05f);
         GetComponent<MeshRenderer>().sharedMaterial.mainTextureScale = new Vector2(1, textureRepeat);
 
-        GetComponent<Renderer>().material.color = StateToColor(state);
+        GetComponent<Renderer>().sharedMaterial.color = StateToColor(state);
     }
 
     Mesh CreateRoadMesh(Vector3[] points, bool isClosed)

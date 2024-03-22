@@ -10,7 +10,7 @@ public class Gps : MonoBehaviour
     [SerializeField] int index = 0;
 
 
-    void Start()
+    void Awake()
     {
         if (fromCSV)
             coordinates = ReadCSV.ReadCsvFile(CsvFilePath);

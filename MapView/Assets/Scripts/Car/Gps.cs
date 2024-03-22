@@ -5,6 +5,7 @@ using WebSocketSharp;
 using System.Collections.Generic;
 
 using Random = UnityEngine.Random;
+using TMPro;
 
 public class Gps : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class Gps : MonoBehaviour
     private Queue<(float x, float y)> coordinates = new();
     private Queue<RoadState> states = new();
 
+    [SerializeField] TMP_Text text;
+
     void Awake()
     {
         if (fromCSV)
@@ -31,6 +34,7 @@ public class Gps : MonoBehaviour
             ws.OnMessage += (sender, e) =>
             {
                 List<string> data = e.Data.Split(' ').ToList();
+                text.SetText(e.Data);
                 if (data.Count < 3)
                     return;
                 if (!float.TryParse(data[0] ,out float longitude) || !float.TryParse(data[1], out float latitude))

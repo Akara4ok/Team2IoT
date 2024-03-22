@@ -1,6 +1,6 @@
 public enum RoadState
 {
-    Bad = 0,
+    Poor = 0,
     Normal = 1,
     Good = 2
 }

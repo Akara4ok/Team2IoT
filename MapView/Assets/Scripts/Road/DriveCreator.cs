@@ -84,7 +84,7 @@ public class DriveCreator : MonoBehaviour
         {
             RoadState.Good => Color.green,
             RoadState.Normal => Color.yellow,
-            RoadState.Bad => Color.red,
+            RoadState.Poor => Color.red,
             _ => Color.gray
         };
     }

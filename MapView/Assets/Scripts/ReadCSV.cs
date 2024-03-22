@@ -7,12 +7,11 @@ using System.Collections.Generic;
 class ReadCSV
 {
     private const int EarthRadius = 6371;
-    public static List<(float x, float y)> ReadCsvFile(string filePath)
+    public static Queue<(float x, float y)> ReadCsvFile(string filePath)
     {
-        List<(float x, float y)> coordinates = new();
+        Queue<(float x, float y)> coordinates = new();
 
-        float startingX = 0;
-        float startingY = 0;
+        (float x, float y) startingCoords = (0, 0);
         try
         {
             using StreamReader reader = new(filePath);
@@ -24,14 +23,12 @@ class ReadCSV
                 if (fields.Length >= 2 && float.TryParse(fields[0], NumberStyles.Any, CultureInfo.InvariantCulture, out float longitude)
                     && float.TryParse(fields[1], NumberStyles.Any, CultureInfo.InvariantCulture, out float latitude))
                 {
-                    float x = EarthRadius * longitude * (float)Math.Cos(latitude);
-                    float y = EarthRadius * latitude;
                     if (coordinates.Count == 0)
                     {
-                        startingX = x;
-                        startingY = y;
+                        startingCoords = Gps.GeographicCoordsToXY(longitude, latitude);
+                        coordinates.Enqueue(startingCoords);
                     }
-                    coordinates.Add((x - startingX, y - startingY));
+                    else coordinates.Enqueue(Gps.GeographicCoordsToXY(longitude, latitude, startingCoords));
                 }
             }
         }

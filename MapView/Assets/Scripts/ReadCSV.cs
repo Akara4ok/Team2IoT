@@ -26,7 +26,7 @@ class ReadCSV
                     if (coordinates.Count == 0)
                     {
                         startingCoords = Gps.GeographicCoordsToXY(longitude, latitude);
-                        coordinates.Enqueue(startingCoords);
+                        coordinates.Enqueue((0, 0));
                     }
                     else coordinates.Enqueue(Gps.GeographicCoordsToXY(longitude, latitude, startingCoords));
                 }

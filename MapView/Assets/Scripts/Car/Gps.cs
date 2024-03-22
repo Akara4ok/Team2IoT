@@ -1,8 +1,8 @@
+using System;
 using UnityEngine;
 using System.Linq;
 using WebSocketSharp;
 using System.Collections.Generic;
-using System;
 
 using Random = UnityEngine.Random;
 
@@ -50,8 +50,9 @@ public class Gps : MonoBehaviour
         state = RoadState.Normal;
         if (coordinates.Count == 0)
             return false;
-        nextCoords.x = coordinates.Dequeue().x;
-        nextCoords.z = coordinates.Dequeue().y;
+        var (x, y) = coordinates.Dequeue();
+        nextCoords.x = x;
+        nextCoords.z = y;
         if (fromCSV)
             state = (RoadState)Random.Range(0, 2);
         else
@@ -66,6 +67,7 @@ public class Gps : MonoBehaviour
         {
             coords = GeographicCoordsToXY(longitude, latitude);
             startingCoords = coords;
+            _haveStarting = true;
         }
         else coords = GeographicCoordsToXY(longitude, latitude, startingCoords);
         return coords;

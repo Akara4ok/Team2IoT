@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 from typing import Set, Dict, List, Any
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Body, Depends
 from sqlalchemy import (
@@ -149,7 +150,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int):
 async def send_data_to_subscribers(user_id: int, data):
     if user_id in subscriptions:
         for websocket in subscriptions[user_id]:
-            await websocket.send_json(json.dumps(data))
+            await websocket.send_text(data)
 
 
 # FastAPI CRUDL endpoints
@@ -168,6 +169,9 @@ async def create_processed_agent_data(data: List[ProcessedAgentData]):
         table.z = item.agent_data["accelerometer"]["z"]
         table.timestamp = item.agent_data["timestamp"]
         items.append(table)
+        await send_data_to_subscribers(0, str(item.agent_data["gps"]["longitude"]) + " " 
+                                 + str(item.agent_data["gps"]["latitude"]) + " " 
+                                 + str(item.road_state))
     SessionLocal.add_all(items)
     SessionLocal.commit()
 

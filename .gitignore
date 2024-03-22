@@ -163,3 +163,4 @@ cython_debug/
 
 strore/docker/postgres_data/
 hub/docker/mosquitto/data/
+*.db

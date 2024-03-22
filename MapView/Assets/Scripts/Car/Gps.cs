@@ -16,7 +16,7 @@ public class Gps : MonoBehaviour
     const string CsvFilePath = "Assets/testData/gps.csv";
 
     private WebSocket ws;
-    const string WebSocketPath = "store://localhost:8000";
+    const string WebSocketPath = "ws://0.0.0.0:8000/ws/0";
 
     private Queue<(float x, float y)> coordinates = new();
     private Queue<RoadState> states = new();

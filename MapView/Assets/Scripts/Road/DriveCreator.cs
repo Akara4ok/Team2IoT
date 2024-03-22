@@ -12,6 +12,7 @@ public class DriveCreator : MonoBehaviour
     public float roadWidth = 1;
     public bool autoUpdate;
     public float tiling = 1;
+    public RoadState state = RoadState.Normal;
 
     public void UpdateRoad()
     {
@@ -21,6 +22,8 @@ public class DriveCreator : MonoBehaviour
 
         int textureRepeat = Mathf.RoundToInt(tiling * points.Length * spacing * .05f);
         GetComponent<MeshRenderer>().sharedMaterial.mainTextureScale = new Vector2(1, textureRepeat);
+
+        GetComponent<Renderer>().material.color = StateToColor(state);
     }
 
     Mesh CreateRoadMesh(Vector3[] points, bool isClosed)
@@ -74,5 +77,16 @@ public class DriveCreator : MonoBehaviour
         };
 
         return mesh;
+    }
+
+    public static Color StateToColor(RoadState state)
+    {
+        return state switch
+        {
+            RoadState.Good => Color.green,
+            RoadState.Normal => Color.yellow,
+            RoadState.Bad => Color.red,
+            _ => Color.gray
+        };
     }
 }

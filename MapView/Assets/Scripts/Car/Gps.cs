@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 using Random = UnityEngine.Random;
 using TMPro;
+using System.Globalization;
 
 public class Gps : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class Gps : MonoBehaviour
     const string CsvFilePath = "Assets/testData/gps.csv";
 
     private WebSocket ws;
-    const string WebSocketPath = "ws://0.0.0.0:8000/ws/0";
+    const string WebSocketPath = "ws://localhost:8000/ws/0";
 
     private Queue<(float x, float y)> coordinates = new();
     private Queue<RoadState> states = new();
@@ -34,17 +35,25 @@ public class Gps : MonoBehaviour
             ws.OnMessage += (sender, e) =>
             {
                 List<string> data = e.Data.Split(' ').ToList();
-                text.SetText(e.Data);
+                //text.SetText(e.Data);
                 if (data.Count < 3)
                     return;
-                if (!float.TryParse(data[0] ,out float longitude) || !float.TryParse(data[1], out float latitude))
+
+                if (!float.TryParse(data[0], NumberStyles.Any, CultureInfo.InvariantCulture, out float longitude) ||
+                    !float.TryParse(data[1], NumberStyles.Any, CultureInfo.InvariantCulture, out float latitude))
                     return;
+
                 if (!Enum.TryParse(data[2], out RoadState state))
                     return;
+
                 coordinates.Enqueue(GetCoords(longitude, latitude));
                 states.Enqueue(state);
             };
             ws.Connect();
+
+            ws.OnOpen += (sender, e) => {
+                Debug.Log("Coonection was established");
+            };
         }
     }
 
@@ -61,6 +70,9 @@ public class Gps : MonoBehaviour
             state = (RoadState)Random.Range(0, 2);
         else
             state = states.Dequeue();
+
+        Debug.Log(state);
+
         return true;
     }
 
@@ -69,8 +81,8 @@ public class Gps : MonoBehaviour
         (float x, float y) coords;
         if (!_haveStarting)
         {
-            coords = GeographicCoordsToXY(longitude, latitude);
-            startingCoords = coords;
+            startingCoords = GeographicCoordsToXY(longitude, latitude);
+            coords = (0, 0);
             _haveStarting = true;
         }
         else coords = GeographicCoordsToXY(longitude, latitude, startingCoords);

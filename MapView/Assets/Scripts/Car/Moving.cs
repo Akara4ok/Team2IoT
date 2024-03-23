@@ -79,7 +79,7 @@ public class Moving : MonoBehaviour
                     ChangeTargetSpeed();
                     _target = _nextTarget;
                     _targetState = _nextTragetState;
-                    driveCreator.state = _targetState;
+                    //driveCreator.state = _targetState;
                     _isNextTarget = false;
                 }
                 else
@@ -99,7 +99,7 @@ public class Moving : MonoBehaviour
         else if (Gps.GetNext(out _target, out _targetState))
         {
             _isTarget = true;
-            driveCreator.state = _targetState;
+            //driveCreator.state = _targetState;
             roadCreator.road.AddSegment(_target);
             driveCreator.UpdateRoad();
         }
@@ -126,6 +126,14 @@ public class Moving : MonoBehaviour
     {
         targetSpeed = ((_nextTarget - _target).magnitude) / timeDeleyGPS;
         acceleration = (targetSpeed - Speed) / (timeDeleyGPS / 2);
+        driveCreator.state = targetSpeed switch
+        {
+            < 10 => RoadState.Poor,
+            < 18 => RoadState.Normal,
+            _ => RoadState.Good
+        };
+        driveCreator.UpdateRoad();
+
     }
 
     private bool IsOnTarget() => transform.position.x == _target.x && transform.position.z == _target.z;

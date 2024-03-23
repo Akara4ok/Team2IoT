@@ -2,11 +2,10 @@ using System;
 using UnityEngine;
 using System.Linq;
 using WebSocketSharp;
+using System.Globalization;
 using System.Collections.Generic;
 
 using Random = UnityEngine.Random;
-using TMPro;
-using System.Globalization;
 
 public class Gps : MonoBehaviour
 {
@@ -53,6 +52,11 @@ public class Gps : MonoBehaviour
                 Debug.Log("Coonection was established");
             };
         }
+    }
+
+    void OnDestroy()
+    {
+        ws.Close();
     }
 
     public bool GetNext(out Vector3 nextCoords, out RoadState state, float defaultY = 0)

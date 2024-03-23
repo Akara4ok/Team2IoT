@@ -14,6 +14,9 @@ public class Moving : MonoBehaviour
     [field: Header("GPS")]
     [SerializeField] Gps Gps;
 
+    [field: Header("Camera")]
+    [SerializeField] CameraFollow cf;
+
     [field: Header("Debug")]
     [SerializeField] float targetSpeed;
     [field: SerializeField]
@@ -56,6 +59,7 @@ public class Moving : MonoBehaviour
     {
         UpdateSpeed(); 
         Move();
+        cf.Move();
     }
 
     private void UpdateSpeed()
@@ -79,7 +83,6 @@ public class Moving : MonoBehaviour
                     ChangeTargetSpeed();
                     _target = _nextTarget;
                     _targetState = _nextTragetState;
-                    //driveCreator.state = _targetState;
                     _isNextTarget = false;
                 }
                 else
@@ -99,7 +102,6 @@ public class Moving : MonoBehaviour
         else if (Gps.GetNext(out _target, out _targetState))
         {
             _isTarget = true;
-            //driveCreator.state = _targetState;
             roadCreator.road.AddSegment(_target);
             driveCreator.UpdateRoad();
         }

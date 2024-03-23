@@ -301,6 +301,10 @@ PrefabInstance:
       value: Car
       objectReference: {fileID: 0}
     - target: {fileID: 5976033769557430400, guid: 854b09b0882fa2c40bf87942f7509af7, type: 3}
+      propertyPath: cf
+      value: 
+      objectReference: {fileID: 1285639655}
+    - target: {fileID: 5976033769557430400, guid: 854b09b0882fa2c40bf87942f7509af7, type: 3}
       propertyPath: Gps
       value: 
       objectReference: {fileID: 1347599450}
@@ -362,7 +366,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8934456273959580163, guid: 854b09b0882fa2c40bf87942f7509af7, type: 3}
       propertyPath: fromCSV
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -771,6 +775,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1285639655 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1534863855456451555, guid: 2631dc0ed026aac4fbdb3529394eca8f, type: 3}
+  m_PrefabInstance: {fileID: 3965440116178796094}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e47faf9c3e3b6804689e0f5b46ea16c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1347599450 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8934456273959580163, guid: 854b09b0882fa2c40bf87942f7509af7, type: 3}

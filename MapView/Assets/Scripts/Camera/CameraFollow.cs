@@ -16,11 +16,11 @@ public class CameraFollow : MonoBehaviour
 
     void Update()
     {
-        Move();
+        //Move();
         Rotate();
     }
 
-    private void Move()
+    public void Move()
     {
         int dirOffsetX = (transform.eulerAngles.y >= 0 && transform.eulerAngles.y < 180) 
             ? -1 

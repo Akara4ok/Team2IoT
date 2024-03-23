@@ -56,7 +56,7 @@ public class Gps : MonoBehaviour
 
     void OnDestroy()
     {
-        ws.Close();
+        ws?.Close();
     }
 
     public bool GetNext(out Vector3 nextCoords, out RoadState state, float defaultY = 0)

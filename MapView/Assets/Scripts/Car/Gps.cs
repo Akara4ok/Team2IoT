@@ -23,8 +23,6 @@ public class Gps : MonoBehaviour
     private Queue<(float x, float y)> coordinates = new();
     private Queue<RoadState> states = new();
 
-    [SerializeField] TMP_Text text;
-
     void Awake()
     {
         if (fromCSV)
@@ -34,8 +32,8 @@ public class Gps : MonoBehaviour
             ws = new WebSocket(WebSocketPath);
             ws.OnMessage += (sender, e) =>
             {
+                Debug.Log(e.Data);
                 List<string> data = e.Data.Split(' ').ToList();
-                //text.SetText(e.Data);
                 if (data.Count < 3)
                     return;
 

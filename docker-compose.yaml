@@ -28,6 +28,8 @@ services:
       HUB_MQTT_BROKER_HOST: "mqtt"
       HUB_MQTT_BROKER_PORT: 1883
       HUB_MQTT_TOPIC: "processed_data_topic"
+    volumes:
+      - ./edge/docker/result:/result
     networks:
       mqtt_network:
       edge_hub:
